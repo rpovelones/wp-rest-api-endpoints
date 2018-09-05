@@ -21,15 +21,20 @@ You can pass WP_Query args as URL params:
 
 ```
 /wp-json/{your-namespace}/{api-version}/{my-post-type-slug}/?posts_per_page=2&paged=1
+```
 
 ## Filtering endpoint args
 
 For filtering args, for example for a certain post type, use the `my_theme_parse_query_args` filter.
 
 ```php
-function test($args, $params) {
-  $args['posts_per_page'] = 1;
+function my_post_type_api_filter($args, $params) {
+
+  if ( $args['posts_per_page'] === 'my-post-type-slug' ) {
+    $args['posts_per_page'] = 1;
+  }
+
   return $args;
 }
-add_filter('my_theme_parse_query_args', 'test', 10, 2);
+add_filter('my_theme_parse_query_args', 'my_post_type_api_filter', 10, 2);
 ```
